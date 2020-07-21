@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="container">
     <van-search v-model="value"
                 show-action
                 placeholder="请输入搜索关键词"
                 @search="onSearch"
-                :background="bgColor"
+                :background="color"
                 shape="round"
                 @cancel="onCancel">
       <template #action>
@@ -20,17 +20,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
       value: ''
     }
   },
-  props: {
-    bgColor: {
-      type: String,
-      default: '#ff2b22'
-    }
+  computed: {
+    ...mapGetters(['color'])
   },
   methods: {
     onSearch (val) {
@@ -45,14 +44,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.right {
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  padding: 0;
-  font-size: 13px;
-  line-height: 20px;
-  align-items: center;
-  justify-content: space-between;
+.container {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  .right {
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    padding: 0;
+    font-size: 13px;
+    line-height: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 </style>

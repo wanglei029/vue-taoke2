@@ -8,8 +8,9 @@
   </div>
 </template>
 <script>
-import MHeader from './components/m-header/m-header'
-import FooterTab from 'components/footer-tab/footer-tab'
+import MHeader from './components/base/m-header/m-header'
+import FooterTab from 'components/base/footer-tab/footer-tab'
+
 export default {
   components: {
     MHeader,
