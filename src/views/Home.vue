@@ -5,7 +5,6 @@
              @jump='jumpbyid'></my-menu>
     <recommend :recommend='recommendList'
                :color='color'></recommend>
-    <div>{{color}}</div>
   </div>
 </template>
 

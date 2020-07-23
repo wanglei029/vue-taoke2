@@ -17,31 +17,45 @@
       <div class="right iconfont icon-caidan2"
            @click="showList"></div>
     </div>
-    <div class="menulist"
-         v-if="showflag">
-      <div class="top">
-        <span>选择分类</span>
-        <span class="iconfont icon-up2"
-              @click="showList"></span>
-      </div>
-      <div class="down">
-        <div v-for="item in menu"
-             class="item"
-             @click="jumpbyid(item.id)"
-             :key="item.id">
-          <img :src="item.img1">
-          <span>{{item.name}}</span>
+    <transition name="fade">
+      <div class="menulist"
+           v-if="showflag">
+        <div class="top">
+          <span>选择分类</span>
+          <span class="iconfont icon-up2"
+                @click="showList"></span>
         </div>
-      </div>
+        <menudown :menu='menu'></menudown>
 
-    </div>
+        <!-- <div>
+        <scroll class="down"
+                ref='scrollRef'
+                :data='menu'>
+          <div v-for="item in menu"
+               class="item"
+               @click="jumpbyid(item.id)"
+               :key="item.id">
+            <img :src="item.img1"
+                 @onload='loadImage'>
+            <span>{{item.name}}</span>
+          </div>
+        </scroll>
+      </div> -->
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import BScroll from '@better-scroll/core'
+// import Scroll from 'components/base/scroll/scroll'
+import Menudown from 'components/home/menudown'
 
 export default {
+  components: {
+    // Scroll,
+    Menudown
+  },
   props: {
     menu: {
       type: Array,
@@ -71,16 +85,25 @@ export default {
     init () {
       this.bs = new BScroll(this.$refs.scroll, {
         scrollX: true,
-        probeType: 3 // listening scroll hook
+        probeType: 3, // listening scroll hook
+        disableMouse: false,
+        disableTouch: false
       })
       this._registerHooks(['scroll', 'scrollEnd'], (pos) => {
-        console.log('done', pos)
+        console.log('done', this.bs.scrollX, pos)
       })
     },
     _registerHooks (hookNames, handler) {
       hookNames.forEach((name) => {
         this.bs.on(name, handler)
       })
+    },
+    loadImage () {
+      if (!this.checkLoaded) {
+        this.$refs.scrollRef.refresh()
+        this.checkLoaded = true
+        console.log('图片加载')
+      }
     }
   },
   watch: {
@@ -101,6 +124,7 @@ export default {
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
 .container {
+  width: 100%;
   position: fixed;
   top: 60px;
   z-index: 100;
@@ -158,6 +182,7 @@ export default {
     }
 
     .down {
+      overflow: hidden;
       display: flex;
       flex-flow: row wrap;
       background: #fff;
@@ -180,5 +205,13 @@ export default {
       }
     }
   }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.6s;
+}
+
+.fade-enter, .fade-leave-to { /* .fade-leave-active below version 2.1.8 */
+  opacity: 0;
 }
 </style>
